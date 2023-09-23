@@ -1,53 +1,48 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import {
   ContactFormContainer,
   InputContainer,
   BtnElement,
 } from './ContactForm.styled';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
-export class ContactForm extends Component {
-  state = { ...INITIAL_STATE };
+export const ContactForm = ({ createContactData }) => {
+  const [form, setForm] = useState({ name: '', number: '' });
+  const { name, number } = form;
 
-  handleChange = evt => {
-    this.setState({ [evt.target.name]: evt.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    setForm(prevForm => ({ ...prevForm, [name]: value }));
   };
 
-  handleSubmit = evt => {
+  const handleSubmit = evt => {
     evt.preventDefault();
-    this.props.createContactData(this.state);
-    this.setState(INITIAL_STATE);
+    createContactData(form);
+    setForm({ name: '', number: '' });
   };
 
-  render() {
-    return (
-      <ContactFormContainer onSubmit={this.handleSubmit}>
-        <h2>ContactForm</h2>
-        <label>Name</label>
-        <InputContainer
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.name}
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-        />
-        <label>Number</label>
-        <InputContainer
-          type="tel"
-          onChange={this.handleChange}
-          value={this.state.number}
-          name="number"
-          pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-        />
-        <BtnElement type="submit">Add contact</BtnElement>
-      </ContactFormContainer>
-    );
-  }
-}
+  return (
+    <ContactFormContainer onSubmit={handleSubmit}>
+      <h2>ContactForm</h2>
+      <label>Name</label>
+      <InputContainer
+        type="text"
+        onChange={handleChange}
+        value={name}
+        name="name"
+        pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+        required
+      />
+      <label>Number</label>
+      <InputContainer
+        type="tel"
+        onChange={handleChange}
+        value={number}
+        name="number"
+        pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
+        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+        required
+      />
+      <BtnElement type="submit">Add contact</BtnElement>
+    </ContactFormContainer>
+  );
+};
