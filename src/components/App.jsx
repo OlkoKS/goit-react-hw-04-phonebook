@@ -10,22 +10,9 @@ export const App = () => {
   );
   const [filter, setFilter] = useState('');
 
-  // componentDidMount() {
-  //   let localData = localStorage.getItem('contacts');
-  //   if (localData && JSON.parse(localData).length > 0) {
-  //     this.setState({ contacts: JSON.parse(localData) });
-  //   }
-  // }
-
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
-
-  // componentDidUpdate(_, prevState) {
-  //   if (this.state.contacts.length !== prevState.contacts.length) {
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  //   }
-  // }
 
   const createContactData = contactData => {
     const sameContact = contacts.find(
@@ -43,11 +30,7 @@ export const App = () => {
       ...contactData,
       id: nanoid(),
     };
-    setContacts([...contacts, newContact]);
-
-    // setContacts(prev => ({
-    //   contacts: [...prev.contacts, newContact],
-    // }));
+    setContacts(prev => [...prev, newContact]);
   };
 
   const handleFilter = userQuery => {
@@ -55,7 +38,9 @@ export const App = () => {
   };
 
   const handleDelete = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
+    setContacts(prevContacts =>
+      prevContacts.filter(contact => contact.id !== id)
+    );
   };
 
   const handleContacts = () => {
